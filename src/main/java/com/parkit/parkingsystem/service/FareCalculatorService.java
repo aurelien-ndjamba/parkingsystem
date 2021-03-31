@@ -30,7 +30,7 @@ public class FareCalculatorService {
 
 		double durationHour = (double) duration / (Duration.hourInSecond * Duration.secondInMillisecond);
 
-		if (durationHour > 0.5) {
+		if (durationHour > Duration.halfHourByHour) {
 
 			switch (ticket.getParkingSpot().getParkingType()) {
 			case CAR: {
@@ -47,6 +47,6 @@ public class FareCalculatorService {
 		}
 
 		else
-			ticket.setPrice(0); // STORY1: Free 30-min parking
+			ticket.setPrice(Fare.RATE_FOR_LESS_THAN_HALF_HOUR); // STORY1: Free 30-min parking
 	}
 }
