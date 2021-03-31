@@ -15,8 +15,8 @@ public class FareCalculatorService {
 		 * TODO 1: Fix the code to make the unit tests pass
 		 * 
 		 * La méthode .getHours() du type DATE est obsolète, deplus elle renvoie un int
-		 * compris entre 0 et 23 qui représente l'heure du jour. Donc le prix n'est pas 
-		 * calculé sur le temps par minutes réellement stationné que ce soit la même 
+		 * compris entre 0 et 23 qui représente l'heure du jour. Donc le prix n'est pas
+		 * calculé sur le temps par minutes réellement stationné que ce soit la même
 		 * journée ou au delà.
 		 * 
 		 * La méthode .getHours() est remplacée par .getTime() pour en tenir compte.
@@ -27,20 +27,26 @@ public class FareCalculatorService {
 		long outHour = ticket.getOutTime().getTime();
 
 		long duration = outHour - inHour;
-		
+
 		double durationHour = (double) duration / (Duration.hourInSecond * Duration.secondInMillisecond);
 
-		switch (ticket.getParkingSpot().getParkingType()) {
-		case CAR: {
-			ticket.setPrice(durationHour * Fare.CAR_RATE_PER_HOUR);
-			break;
+		if (durationHour > 0.5) {
+
+			switch (ticket.getParkingSpot().getParkingType()) {
+			case CAR: {
+				ticket.setPrice(durationHour * Fare.CAR_RATE_PER_HOUR);
+				break;
+			}
+			case BIKE: {
+				ticket.setPrice(durationHour * Fare.BIKE_RATE_PER_HOUR);
+				break;
+			}
+			default:
+				throw new IllegalArgumentException("Unkown Parking Type");
+			}
 		}
-		case BIKE: {
-			ticket.setPrice(durationHour * Fare.BIKE_RATE_PER_HOUR);
-			break;
-		}
-		default:
-			throw new IllegalArgumentException("Unkown Parking Type");
-		}
+
+		else
+			ticket.setPrice(0); // STORY1: Free 30-min parking
 	}
 }
