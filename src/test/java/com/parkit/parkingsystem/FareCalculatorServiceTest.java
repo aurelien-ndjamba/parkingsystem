@@ -7,6 +7,8 @@ import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.FareCalculatorService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,7 +30,9 @@ public class FareCalculatorServiceTest {
         ticket = new Ticket();
     }
 
-    @Test
+	@Tag("CAR")
+	@DisplayName("Controler que la méthode 'FareCalculatorService' soit juste pour une durée de stationnement 'CAR' d'exactement 1 heure")
+	@Test
     public void calculateFareCar(){
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  60 * 60 * 1000) );
@@ -42,7 +46,9 @@ public class FareCalculatorServiceTest {
         assertEquals(ticket.getPrice(), Fare.CAR_RATE_PER_HOUR);
     }
 
-    @Test
+	@Tag("BIKE")
+	@DisplayName("Controler que la méthode 'FareCalculatorService' soit juste pour une durée de stationnement 'BIKE' d'exactement 1 heure")
+	@Test
     public void calculateFareBike(){
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  60 * 60 * 1000) );
@@ -56,7 +62,9 @@ public class FareCalculatorServiceTest {
         assertEquals(ticket.getPrice(), Fare.BIKE_RATE_PER_HOUR);
     }
 
-    @Test
+	@Tag("UNKOWN_TYPE")
+	@DisplayName("Controler que la méthode 'FareCalculatorService' lève une exception lorsque quand le type de véhicule stationné est inconnu")
+	@Test
     public void calculateFareUnkownType(){
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  60 * 60 * 1000) );
@@ -69,7 +77,9 @@ public class FareCalculatorServiceTest {
         assertThrows(NullPointerException.class, () -> fareCalculatorService.calculateFare(ticket));
     }
 
-    @Test
+	@Tag("BIKE")
+	@DisplayName("Controler que la méthode 'FareCalculatorService' lève une exception lorsque l'heure d'entrée est postérieure à l'heure de sortie")
+	@Test
     public void calculateFareBikeWithFutureInTime(){
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() + (  60 * 60 * 1000) );
@@ -82,7 +92,9 @@ public class FareCalculatorServiceTest {
         assertThrows(IllegalArgumentException.class, () -> fareCalculatorService.calculateFare(ticket));
     }
 
-    @Test
+	@Tag("BIKE")
+	@DisplayName("Controler que la méthode 'FareCalculatorService' soit juste pour une durée de stationnement 'BIKE' d'exactement 45 minutes")
+	@Test
     public void calculateFareBikeWithLessThanOneHourParkingTime(){
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  45 * 60 * 1000) );//45 minutes parking time should give 3/4th parking fare
@@ -96,7 +108,9 @@ public class FareCalculatorServiceTest {
         assertEquals((0.75 * Fare.BIKE_RATE_PER_HOUR), ticket.getPrice() );
     }
 
-    @Test
+	@Tag("CAR")
+	@DisplayName("Controler que la méthode 'FareCalculatorService' soit juste pour une durée de stationnement 'CAR' d'exactement 45 minutes")
+	@Test
     public void calculateFareCarWithLessThanOneHourParkingTime(){
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  45 * 60 * 1000) );//45 minutes parking time should give 3/4th parking fare
@@ -110,7 +124,9 @@ public class FareCalculatorServiceTest {
         assertEquals( (0.75 * Fare.CAR_RATE_PER_HOUR) , ticket.getPrice());
     }
 
-    @Test
+	@Tag("CAR")
+	@DisplayName("Controler que la méthode 'FareCalculatorService' soit juste pour une durée de stationnement 'CAR' d'exactement 24 heures")
+	@Test
     public void calculateFareCarWithMoreThanADayParkingTime(){
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  24 * 60 * 60 * 1000) );//24 hours parking time should give 24 * parking fare per hour
