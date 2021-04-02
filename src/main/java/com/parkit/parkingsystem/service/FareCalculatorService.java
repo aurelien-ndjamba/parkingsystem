@@ -48,5 +48,8 @@ public class FareCalculatorService {
 
 		else
 			ticket.setPrice(Fare.RATE_FOR_LESS_THAN_HALF_HOUR); // STORY1: Free 30-min parking
+		
+		if (ticket.isDiscount())  //STORY2 : 5%-discount for recurring users
+			ticket.setPrice(ticket.getPrice() * Fare.DISCOUNT);
 	}
 }
