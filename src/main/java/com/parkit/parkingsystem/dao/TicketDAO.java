@@ -22,6 +22,7 @@ public class TicketDAO {
     public boolean saveTicket(Ticket ticket){
         Connection con = null;
         PreparedStatement ps = null;
+        boolean saving = false;
         try {
             con = dataBaseConfig.getConnection();
             ps = con.prepareStatement(DBConstants.SAVE_TICKET);
@@ -33,14 +34,17 @@ public class TicketDAO {
             ps.setTimestamp(4, new Timestamp(ticket.getInTime().getTime()));
             ps.setTimestamp(5, (ticket.getOutTime() == null)?null: (new Timestamp(ticket.getOutTime().getTime())) );
             ps.setBoolean(6, ticket.isDiscount()); // STORY2 : 5%-discount for recurring users
-            return ps.execute();
+            saving = ps.execute();
         }catch (Exception ex){
             logger.error("Error fetching next available slot",ex);
         }finally {
         	dataBaseConfig.closePreparedStatement(ps);
             dataBaseConfig.closeConnection(con);
-            return false;
         }
+        if (saving == true)
+        	return saving;
+        else
+        	return false;
     }
 
     public Ticket getTicket(String vehicleRegNumber) {
@@ -71,8 +75,8 @@ public class TicketDAO {
         	dataBaseConfig.closeResultSet(rs);
             dataBaseConfig.closePreparedStatement(ps);
             dataBaseConfig.closeConnection(con);
-            return ticket;
         }
+        return ticket;
     }
 
     public boolean updateTicket(Ticket ticket) {

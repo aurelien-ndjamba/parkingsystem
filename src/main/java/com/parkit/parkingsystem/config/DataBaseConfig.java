@@ -46,13 +46,9 @@ public class DataBaseConfig {
         			fileInputStream.close();
     		} catch (IOException ex) {
     			logger.error("Database connection error",ex);
-    		}
-    		return DriverManager.getConnection(datasourceUrl, datasourceUsername, datasourcePassword);	
+    		}	
     	}
-        
-        
-        
-//        		"jdbc:mysql://localhost:3306/prod?zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=UTC","root","rootroot");
+        return DriverManager.getConnection(datasourceUrl, datasourceUsername, datasourcePassword);
     }
 
     public void closeConnection(Connection con){
