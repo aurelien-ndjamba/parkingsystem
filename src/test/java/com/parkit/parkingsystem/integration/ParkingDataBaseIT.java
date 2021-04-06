@@ -1,5 +1,6 @@
 package com.parkit.parkingsystem.integration;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -7,7 +8,6 @@ import static org.mockito.Mockito.when;
 import java.util.Date;
 
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -83,8 +83,10 @@ public class ParkingDataBaseIT {
 		// TODO: check that a ticket is actually saved in DB and Parking table is
 		// updated with availability
 		Mockito.verify(ticketDAO).saveTicket(Mockito.any(Ticket.class));
-		Mockito.verify(parkingSpotDAO).updateParking(Mockito.any(ParkingSpot.class));
+		Mockito.verify(parkingSpotDAO).updateParking(Mockito.any(ParkingSpot.class)); 
     }
+    
+    
     @Tag("ParkingLotExit")
 	@DisplayName("Controler que pour la sortie d'un véhicule, le tarif et l'horaire de départ sont correctement sauvegardé dans la database")
     @Test
@@ -111,8 +113,9 @@ public class ParkingDataBaseIT {
 		// TODO: check that the fare generated and out time are populated correctly in
 		// the database
 		Mockito.verify(parkingSpotDAO).updateParking(Mockito.any(ParkingSpot.class));
-		Assertions.assertEquals(1.5, Math.round(ticket.getPrice()*100.0)/100.0 );
-    	
+		assertThat(Math.round(ticket.getPrice()*100.0)/100.0 ).isEqualTo(1.5);
+		assertThat(ticketDAO.getTicket(VehiculeRegNumber).getOutTime()).isNotNull();      
+		assertThat(ticketDAO.getTicket(VehiculeRegNumber).getOutTime()).isAfter(ticketDAO.getTicket("AZERTY").getInTime());    	
     }
 
 }
