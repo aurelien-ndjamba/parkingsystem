@@ -82,6 +82,7 @@ public class TicketDAO {
     public boolean updateTicket(Ticket ticket) {
         Connection con = null;
         PreparedStatement ps = null;
+        boolean updating = false;
         try {
             con = dataBaseConfig.getConnection();
             ps = con.prepareStatement(DBConstants.UPDATE_TICKET);
@@ -89,13 +90,13 @@ public class TicketDAO {
             ps.setTimestamp(2, new Timestamp(ticket.getOutTime().getTime()));
             ps.setInt(3,ticket.getId());
             ps.execute();
-            return true;
+            updating = true;
         }catch (Exception ex){
             logger.error("Error saving ticket info",ex);
         }finally {
         	dataBaseConfig.closePreparedStatement(ps);
             dataBaseConfig.closeConnection(con);
         }
-        return false;
+        return updating;
     }
 }
